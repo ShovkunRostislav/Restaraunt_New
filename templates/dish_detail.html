@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card">
+    <img src="{{ dish.photo.url }}" class="img-fluid" alt="{{ dish.name }}">
+    <div class="card-body">
+        <h5 class="card-title">{{ dish.name }}</h5>
+        <p class="card-text">{{ dish.description }}</p>
+        <p><strong>Інгредієнти:</strong> {{ dish.ingredients }}</p>
+        <p><strong>Ціна:</strong> {{ dish.price }} грн</p>
+    </div>
+</div>
+<hr>
+<h4>Comments</h4>
+<div class="comments mb-4">
+    {% for comment in comments %}
+        <div class="comment mb-3">
+            <p><strong>{{ comment.user.username }}</strong>: {{ comment.text }}</p>
+            <form method="post" action="{% url 'like_comment' comment.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-sm btn-outline-primary">
+                    <i class="fas fa-heart"></i> ({{ comment.likes.count }})
+                </button>
+            </form>
+        </div>
+    {% endfor %}
+</div>
+    {% if user.is_authenticated %}
+    <h4>Add a Comment</h4>
+    <form method="post" action="{% url 'add_comment' dish.id %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="content">Comment</label>
+            <textarea class="form-control" id="content" name="content" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    {% else %}
+        <p>You need to <a href="{% url 'login' %}">log in</a> to add a comment.</p>
+    {% endif %}
+{% endblock %}

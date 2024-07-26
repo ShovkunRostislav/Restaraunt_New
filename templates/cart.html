@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Ваш кошик</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Назва страви</th>
+                <th>Кількість</th>
+                <th>Ціна</th>
+                <th>Вартість</th>
+                <th>Дії</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart_items %}
+            <tr>
+                <td>{{ item.dish.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.dish.price }}</td>
+                <td>{{ item.dish.price|multiply:item.quantity }}</td>
+                <td>
+                    <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger btn-sm">Видалити</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'create_order' %}" class="btn btn-primary">Оформити замовлення</a>
+</div>
+{% endblock %}

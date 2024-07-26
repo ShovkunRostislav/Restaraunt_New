@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Меню</h2>
+<div class="row">
+    {% for dish in dishes %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <img src="{{ dish.photo.url }}" class="card-img-top" alt="{{ dish.name }}">
+            <div class="card-body">
+                <h5 class="card-title">{{ dish.name }}</h5>
+                <p><strong>Ціна:</strong> {{ dish.price }} грн</p>
+                <div class="d-flex">
+                    <form method="post" action="{% url 'dish_detail' dish.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+                    </form>
+                    <br>
+                    <form method="post" action="{% url 'add_to_cart' dish.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-shopping-cart"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
