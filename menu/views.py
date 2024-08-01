@@ -9,12 +9,11 @@ from .forms import UserRegistrationForm, OrderForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import *
+from django.db.models import Count
 
 def index(request):
-    dishes = Dish.objects.all()
-    liked_dishes = []
-    if request.user.is_authenticated:
-        liked_dishes = request.user.liked_dishes.values_list('id', flat=True)
+    dishes = Dish.objects.annotate(total_likes=Count('likes')).order_by('-total_likes')
+    liked_dishes = request.user.liked_dishes.values_list('id', flat=True) if request.user.is_authenticated else []
     return render(request, 'index.html', {'dishes': dishes, 'liked_dishes': liked_dishes})
 
 def register(request):
@@ -48,7 +47,10 @@ def user_logout(request):
 
 def menu(request):
     dishes = Dish.objects.all()
-    return render(request, 'menu.html', {'dishes': dishes})
+    context = {
+        'dishes': dishes,
+    }
+    return render(request, 'menu.html', context)
 
 def dish_detail(request, dish_id):
     dish = get_object_or_404(Dish, id=dish_id)
@@ -151,3 +153,12 @@ def like_dish(request, dish_id):
 def order_history(request):
     orders = Order.objects.filter(user=request.user).order_by('-created_at')
     return render(request, 'order_history.html', {'orders': orders})
+
+def delete_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    if request.user.is_superuser:
+        comment.delete()
+        messages.success(request, 'Коментар видалено.')
+    else:
+        messages.error(request, 'Ви не маєте дозволу на видалення цього коментаря.')
+    return redirect('dish_detail', dish_id=comment.dish.id)

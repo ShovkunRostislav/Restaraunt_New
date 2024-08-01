@@ -3,12 +3,17 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class Dish(models.Model):
+    CATEGORY_CHOICES = [
+        ('PIZZA', 'PIZZA'),
+        ('DRINKS', 'DRINKS'),
+    ]
     name = models.CharField(max_length=100)
     description = models.TextField()
     ingredients = models.TextField()
     photo = models.ImageField(upload_to='dishes/')
     price = models.DecimalField(max_digits=5, decimal_places=2)
     likes = models.ManyToManyField(User, related_name='liked_dishes', through='Like')
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='PIZZA')
 
     def __str__(self):
         return self.name
@@ -64,8 +69,13 @@ class Cart(models.Model):
         return f"Cart of {self.user.username}"
 
 class CartItem(models.Model):
+    STATUS_CHOICES = [
+        ('', ''),
+        ('', ''),
+    ]
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     dish = models.ForeignKey(Dish, on_delete=models.CASCADE)
+    status = 
     quantity = models.PositiveIntegerField(default=1)
 
     def __str__(self):

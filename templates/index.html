@@ -11,7 +11,7 @@
         </div>
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img src="https://1place.su/ru/blog/wp-content/uploads/2018/10/post52.jpg" class="d-block w-100" alt="Slide 1">
+                <img src="https://cdn.abo.media/upload/article/res/770-430/o_1ei86q6p64imd7fuc31rja8421k.jpg" class="d-block w-100" alt="Slide 1">
             </div>
             <div class="carousel-item">
                 <img src="https://laz.iceni.ru/wp-content/uploads/2020/06/pizza-5179939_640.jpg.webp" class="d-block w-100" alt="Slide 2">
@@ -54,9 +54,9 @@
                     {% csrf_token %}
                     <button type="submit" class="btn btn-sm btn-outline-primary">
                         {% if user.is_authenticated and dish.id in liked_dishes %}
-                            <i class="fas fa-heart"></i>
+                            <i class="fas fa-heart"></i> Забрати лайк
                         {% else %}
-                            <i class="far fa-heart"></i>
+                            <i class="far fa-heart"></i> Поставити лайк
                         {% endif %}
                     </button>
                 </form>

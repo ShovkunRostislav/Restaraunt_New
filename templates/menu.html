@@ -1,23 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Меню</h2>
-<div class="row">
+<br>
+<div class="btn-group d-flex justify-content-center mb-4" role="group">
+    <button type="button" class="btn btn-outline-primary" onclick="filterCategory('PIZZA')">PIZZA</button>
+    <button type="button" class="btn btn-outline-primary" onclick="filterCategory('DRINKS')">DRINKS</button>
+</div>
+<div class="row" id="dishes-container">
     {% for dish in dishes %}
-    <div class="col-md-4 mb-4">
+    <div class="col-md-4 mb-4 dish-card" data-category="{{ dish.category }}">
         <div class="card h-100">
             <img src="{{ dish.photo.url }}" class="card-img-top" alt="{{ dish.name }}">
             <div class="card-body">
                 <h5 class="card-title">{{ dish.name }}</h5>
                 <p><strong>Ціна:</strong> {{ dish.price }} грн</p>
-                <div class="d-flex">
+                <div class="d-flex gap-1">
                     <form method="post" action="{% url 'dish_detail' dish.id %}">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-sm btn-outline-primary">
                             <i class="fas fa-ellipsis-h"></i>
                         </button>
                     </form>
-                    <br>
                     <form method="post" action="{% url 'add_to_cart' dish.id %}">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-sm btn-outline-primary">
@@ -30,4 +33,18 @@
     </div>
     {% endfor %}
 </div>
+
+<script>
+function filterCategory(category) {
+    const dishCards = document.querySelectorAll('.dish-card');
+    dishCards.forEach(card => {
+        if (card.dataset.category === category || category === 'ALL') {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+
+</script>
 {% endblock %}

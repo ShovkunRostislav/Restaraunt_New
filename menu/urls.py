@@ -21,6 +21,7 @@ urlpatterns = [
     path('order_history/', views.order_history, name='order_history'),
     path('comment/<int:comment_id>/like/', views.like_comment, name='like_comment'),
     path('menu/<int:dish_id>/add_comment/', views.add_comment, name='add_comment'),
+    path('comment/<int:comment_id>/delete/', views.delete_comment, name='delete_comment'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
